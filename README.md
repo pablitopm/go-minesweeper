@@ -1,0 +1,2 @@
+# go-minesweeper
+Minesweeper API
