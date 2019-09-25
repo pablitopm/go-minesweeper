@@ -8,24 +8,15 @@ import (
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-
-	// Ping test
-	r.GET("/ping", func(c *gin.Context) {
-		c.String(http.StatusOK, "pong")
-	})
-
-	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
-		user := c.Params.ByName("name")
-		c.JSON(http.StatusOK, gin.H{"user": user})
-	})
-
+	createRoutes(r)
 	return r
 }
 
-// StartServer starts a server in port 8080
-func StartServer() {
+// CreateServer starts a server in port 8080
+func CreateServer() *http.Server {
 	r := setupRouter()
-	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	return &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
 }

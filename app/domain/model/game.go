@@ -1,6 +1,10 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	validation "github.com/go-ozzo/ozzo-validation"
+)
 
 type Game struct {
 	Id        int       `json:"id"`
@@ -13,12 +17,16 @@ type Game struct {
 	//User      User      `json:"user"`
 }
 
-func NewGame(cols int, rows int, mines int) *Game {
-	return &Game{
-		Rows:      rows,
-		Cols:      cols,
-		Mines:     mines,
-		StartTime: time.Now(),
-		Grid:      [][]Cell{},
-	}
+func (g Game) Validate() error {
+	return validation.ValidateStruct(&g,
+		// Rows cannot be empty, and the length must be between 1 and 100
+		validation.Field(&g.Mines, validation.Required, validation.Max(100)),
+		validation.Field(&g.Mines, validation.Required, validation.Min(1)),
+		// Cols cannot be empty, and the length must be between 1 and 100
+		validation.Field(&g.Cols, validation.Required, validation.Max(100)),
+		validation.Field(&g.Cols, validation.Required, validation.Min(1)),
+		// Mines cannot be empty, and the lenght must be between 0 and rows*cols
+		validation.Field(&g.Mines, validation.Required, validation.Max(g.Rows*g.Cols)),
+		validation.Field(&g.Mines, validation.Required, validation.Min(0)),
+	)
 }
