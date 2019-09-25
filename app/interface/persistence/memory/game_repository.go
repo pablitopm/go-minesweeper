@@ -36,7 +36,7 @@ func (r *gameRepository) FindById(id int) (*model.Game, error) {
 	defer r.mu.Unlock()
 
 	for _, game := range r.games {
-		if game.Id == id {
+		if game.ID == id {
 			return game, nil
 		}
 	}
@@ -47,6 +47,13 @@ func (r *gameRepository) Save(game *model.Game) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	r.games[game.Id] = game
+	r.games[game.ID] = game
 	return nil
+}
+
+func (r *gameRepository) Count() int {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	return len(r.games)
 }

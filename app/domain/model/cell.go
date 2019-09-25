@@ -5,11 +5,3 @@ type Cell struct {
 	Clicked bool `json:"clicked"`
 	Value   int  `json:"value"`
 }
-
-func NewCell() *Cell {
-	return &Cell{
-		Mine:    false,
-		Clicked: false,
-		Value:   0,
-	}
-}

@@ -7,7 +7,7 @@ import (
 )
 
 type GameUsecase interface {
-	StartGame(game model.Game) error
+	StartGame(game model.Game) (model.Game, error)
 	EndGame(gameId string) error
 }
 
@@ -23,6 +23,11 @@ func NewGameUsecase(repo repository.GameRepository, service *service.GameService
 	}
 }
 
-func (g *gameUsecase) StartGame(game model.Game) error {
+func (g *gameUsecase) StartGame(game model.Game) (model.Game, error) {
+	ng, _ := g.service.StartGame(game)
+	return ng, nil
+}
+
+func (g *gameUsecase) EndGame(gameId string) error {
 	return nil
 }

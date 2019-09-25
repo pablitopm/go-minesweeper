@@ -7,7 +7,7 @@ import (
 )
 
 func InjectContainer() gin.HandlerFunc {
-	log.Info("Starting container")
+	log.Debug("Starting container")
 	ctn, err := registry.NewContainer()
 	if err != nil {
 		log.Fatalf("failed to build container: %v", err)
