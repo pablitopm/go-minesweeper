@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -20,11 +19,9 @@ func NewGameService(repo repository.GameRepository) *GameService {
 }
 
 func (g *GameService) StartGame(game model.Game) (model.Game, error) {
-	game.ID = g.repo.Count()
 	game.StartTime = time.Now()
 	game.Status = model.New
 	createGrid(&game)
-	g.repo.Save(&game)
 	return game, nil
 }
 
@@ -56,7 +53,6 @@ func createGrid(game *model.Game) error {
 		}
 	}
 
-	fmt.Println(game.Grid)
 	return nil
 }
 

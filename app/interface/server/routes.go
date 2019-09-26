@@ -15,5 +15,9 @@ func createRoutes(r *gin.Engine) {
 	})
 
 	r.POST("/game", rest.CreateGame)
+	r.GET("/games", rest.ListGames)
+	r.GET("/game/:id", rest.GetGame)
+	//r.PATCH("/game/:id", rest.UpdateGame)
+	r.POST("/game/:id/click", rest.ClickCell)
 
 }

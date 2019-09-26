@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/pablitopm/go-minesweeper/app/domain/model"
@@ -31,6 +32,7 @@ func (r *gameRepository) FindAll() ([]*model.Game, error) {
 	return games, nil
 }
 
+//TODO refactor this func
 func (r *gameRepository) FindById(id int) (*model.Game, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
@@ -46,7 +48,8 @@ func (r *gameRepository) FindById(id int) (*model.Game, error) {
 func (r *gameRepository) Save(game *model.Game) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-
+	game.ID = len(r.games) + 1
+	fmt.Println(game.ID)
 	r.games[game.ID] = game
 	return nil
 }
@@ -56,4 +59,16 @@ func (r *gameRepository) Count() int {
 	defer r.mu.Unlock()
 
 	return len(r.games)
+}
+
+func (r *gameRepository) GameExists(id int) bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for _, game := range r.games {
+		if game.ID == id {
+			return true
+		}
+	}
+	return false
 }

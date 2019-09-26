@@ -7,4 +7,5 @@ type GameRepository interface {
 	FindById(id int) (*model.Game, error)
 	Count() int
 	Save(*model.Game) error
+	GameExists(id int) bool
 }
