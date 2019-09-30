@@ -18,14 +18,14 @@ func CreateGame(c *gin.Context) {
 	err := c.BindJSON(&game)
 	if err != nil {
 		log.Error("error", err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 
 	err = game.Validate()
 	if err != nil {
 		log.Error("Did not pass validations", err.Error())
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 
@@ -48,7 +48,12 @@ func GetGame(c *gin.Context) {
 	ID, _ := strconv.Atoi(c.Param("id"))
 	ctn := c.MustGet("ctn").(*registry.Container)
 	useCase := ctn.Resolve("game-usecase").(usecase.GameUsecase)
-	game, _ := useCase.GetGame(ID)
+	game, err := useCase.GetGame(ID)
+	if err != nil {
+		fmt.Println(err)
+		c.String(http.StatusNotFound, err.Error())
+		return
+	}
 
 	c.JSON(http.StatusOK, game)
 }
@@ -60,19 +65,26 @@ func ClickCell(c *gin.Context) {
 		Row int `json:"row"`
 	}{}
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.AbortWithStatusJSON(http.StatusBadRequest, err.Error())
+		c.AbortWithStatusJSON(http.StatusBadRequest, err)
 		return
 	}
 
 	ctn := c.MustGet("ctn").(*registry.Container)
 	useCase := ctn.Resolve("game-usecase").(usecase.GameUsecase)
 
-	if !useCase.GameExists(ID) {
-		msg, _ := fmt.Printf("error: could not find Game with ID %d", ID)
-		log.Error(msg)
-		c.AbortWithStatusJSON(http.StatusNotFound, msg)
+	game, err := useCase.GetGame(ID)
+	if err != nil {
+		log.Errorf("error: could not find Game with ID %d", ID)
+		c.String(http.StatusNotFound, "error: could not find Game")
+		return
 	}
 
-	//WIP need to make the click logic
-	c.JSON(http.StatusOK, "")
+	game, err = useCase.ClickCell(game, req.Row, req.Col)
+
+	if err != nil {
+		log.Error(err.Error())
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, game)
 }

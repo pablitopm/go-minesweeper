@@ -6,27 +6,16 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type Status int
-
-const (
-	New Status = iota
-	OnGoing
-	Paused
-	Finished
-)
-
-func (s Status) String() string {
-	return [...]string{"NEW", "ON_GOING", "PAUSED", "FINISHED"}[s]
-}
-
 type Game struct {
-	ID        int       `json:"id"`
-	Rows      int       `json:"rows"`
-	Cols      int       `json:"cols"`
-	Mines     int       `json:"mines"`
-	Status    Status    `json:"status"`
-	StartTime time.Time `json:"startTime"`
-	Grid      [][]Cell  `json:"grid,omitempty"`
+	ID            int       `json:"id"`
+	Rows          int       `json:"rows"`
+	Cols          int       `json:"cols"`
+	Mines         int       `json:"mines"`
+	CellsRevealed int       `json:"cellsRevealed"`
+	Status        Status    `json:"status"`
+	Result        Result    `json:"result"`
+	StartTime     time.Time `json:"startTime"`
+	Grid          [][]Cell  `json:"grid,omitempty"`
 	//User      User      `json:"user"`
 }
 
