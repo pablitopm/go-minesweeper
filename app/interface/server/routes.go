@@ -17,7 +17,7 @@ func createRoutes(r *gin.Engine) {
 	r.POST("/game", rest.CreateGame)
 	r.GET("/games", rest.ListGames)
 	r.GET("/game/:id", rest.GetGame)
-	//r.PATCH("/game/:id", rest.UpdateGame)
+	//r.PATCH("/game/:id", rest.UpdateGame) //this will be used, to pause game or any other action on a game
 	r.POST("/game/:id/click", rest.ClickCell)
 
 }
