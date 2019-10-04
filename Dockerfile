@@ -6,11 +6,10 @@ COPY . /go/src/github.com/pablitopm/go-minesweeper
 
 WORKDIR /go/src/github.com/pablitopm/go-minesweeper
 
-RUN go get -u ./...
+RUN go get ./...
 RUN go build -o minesweeper cmd/minesweeper/main.go
 
-# Expose port 8080 to the outside world
 EXPOSE 8080
 
-# Command to run the executable
 CMD ["./minesweeper"]
+
